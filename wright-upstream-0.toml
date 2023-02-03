@@ -21,4 +21,6 @@ yaqc_port = 39000
 id = "tsunami-spec-0"
 name = "tsunami-spectrum"
 type = "laser"
+reference_path = ""
+reference_time_us = 13000
 yaqc_port = 39001

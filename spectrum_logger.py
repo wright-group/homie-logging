@@ -29,7 +29,6 @@ hl, = plt.plot(wl, spec.get_measured()["intensities"][sl])
 plt.ylim(-100, 4096)
 
 
-
 def update_line(y):
     hl.set_ydata(y)
     plt.draw()
