@@ -2,7 +2,8 @@ from homie.node.node_base import Node_Base
 from homie.node.property.property_float import Property_Float
 # from homie.node.property.property_boolean import Property_Boolean
 from scipy.optimize import curve_fit
-
+import numpy as np
+import logging
 import yaqc
 import time
 
@@ -76,9 +77,9 @@ class Tsunami(YaqcNode):
     }
 
     def __init__(self, dev, config):
-        self.create_reference(config["reference_path"])
+        self.create_reference(config["reference_path"], config["reference_time_us"])
         # self.client.measure(True)  # ensure looping is on
-        super().__init__(self, dev, config)
+        super().__init__(dev, config)
 
     def get_units(self):
         return self.units
@@ -91,36 +92,37 @@ class Tsunami(YaqcNode):
 
         p_out = self._fit_gauss(nm, y / self.time_us)
         p_out |= {
-            f"relative-{k}": p_abs[k] / self.reference[k] \
-                for k in p_abs.keys() if k not in ["ier"]
+            f"relative-{k}": p_out[k] / self.reference[k] \
+                for k in p_out.keys() if k not in ["ier"]
         }
         return p_out
 
     def _fit_gauss(self, nm, y):
-        p0 = [x[np.argmax(y)], 350., y.max()]
         inds = [np.argmin(np.abs(nm-725)), np.argmin(np.abs(nm-875))]
         sl = slice(min(inds), max(inds), None)
         x = 1e7 / nm[sl]
+        y = y[sl]
+        p0 = [x[np.argmax(y)], 350., y.max()]
         try:
-            p, cov, infodict, mesg, ier = curve_fit(gauss, x, y[sl], *p0, full_output=True)
+            p, cov, infodict, mesg, ier = curve_fit(gauss, x, y, p0, full_output=True)
         except Exception as e:
             logging.getLogger(__name__).error(e)
             return {}
-        rms = ((gauss(x, p) - y[sl])**2).sum()
+        rms = ((gauss(x, *p) - y)**2).sum()
         rms /= x.size
         rms **= 0.5
 
         return dict(
             mu = p[0],
             fwhm = p[1] * 2.35,
-            amp = p[2] / time,
-            area = np.sum(y) / time,
-            rms = rms / time,
+            amp = p[2],
+            area = np.sum(y),
+            rms = rms,
             ier = ier,
         )
 
-    def create_reference(self, path):
-        x, y = np.loadtxt(config["reference_path"], unpack=True)
-        self.reference = self._fit_gauss(self, 1e7 / x, y / config["reference_time"])
-        logging.getLogger(__name__).info(self.reference)
+    def create_reference(self, path, time):
+        nm, y = np.genfromtxt(path, unpack=True, skip_header=14, skip_footer=1)
+        logging.getLogger(__name__).info(f"nm {nm}")
+        self.reference = self._fit_gauss(nm, y / time)
 
