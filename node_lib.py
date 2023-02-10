@@ -1,6 +1,5 @@
 from homie.node.node_base import Node_Base
 from homie.node.property.property_float import Property_Float
-# from homie.node.property.property_boolean import Property_Boolean
 from scipy.optimize import curve_fit
 import numpy as np
 import logging
@@ -35,10 +34,16 @@ class YaqcNode(Node_Base):
             )
 
     def update(self):
-        measured = self.get_measured()
-        if len(measured) > 0:
-            for k in self.units.keys():
-                self.set_property_value(k.replace("_", "-"), measured[k])
+        try:
+            measured = self.get_measured()
+        except TimeoutError as e:
+            logging.getLogger(self.__name__).error(e)
+            return
+        for k in self.units.keys():
+            self.set_property_value(k.replace("_", "-"), measured[k])
+
+    def restart(self):
+        self.client.shutdown(True)
 
     def get_units(self):
         ...
@@ -54,12 +59,13 @@ class Millennia(YaqcNode):
 
     def get_measured(self):
         self.client.measure()
-        while True:
+        start = time.time()
+        while time.time() - start < 3:
             time.sleep(0.1)
             if not self.client.busy():
-                break
-        return self.client.get_measured()
-
+                return self.client.get_measured()
+        self.client.shutdown(True)
+        raise TimeoutError
 
 class Tsunami(YaqcNode):
     units = {

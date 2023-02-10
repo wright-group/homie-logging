@@ -38,5 +38,3 @@ class Upstream_Device(Device_Base):
     def update(self):
         for node in self.nodes.values():
             node.update()
-
-
