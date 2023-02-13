@@ -37,13 +37,10 @@ class YaqcNode(Node_Base):
         try:
             measured = self.get_measured()
         except TimeoutError as e:
-            logging.getLogger(self.__name__).error(e)
+            logging.getLogger(__name__).error(e)
             return
         for k in self.units.keys():
             self.set_property_value(k.replace("_", "-"), measured[k])
-
-    def restart(self):
-        self.client.shutdown(True)
 
     def get_units(self):
         ...
@@ -58,11 +55,12 @@ class Millennia(YaqcNode):
         return self.client.get_channel_units()
 
     def get_measured(self):
+        m_id = self.client.get_measurement_id()
         self.client.measure()
         start = time.time()
         while time.time() - start < 3:
             time.sleep(0.1)
-            if not self.client.busy():
+            if self.client.get_measurement_id() != m_id:
                 return self.client.get_measured()
         self.client.shutdown(True)
         raise TimeoutError
