@@ -63,7 +63,7 @@ class Millennia(YaqcNode):
             if self.client.get_measurement_id() != m_id:
                 return self.client.get_measured()
         self.client.shutdown(True)
-        raise TimeoutError
+        raise TimeoutError(f"Timeout on node {self.__class__}")
 
 class Tsunami(YaqcNode):
     units = {

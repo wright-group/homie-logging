@@ -13,13 +13,14 @@ here = pathlib.Path(__file__).resolve().parent
 config = toml.load(here / "wright-upstream-0.toml")
 wait = config["device"].pop("wait", 15)
 
-khz_system = lib.Upstream_Device(config)
-
 
 def main():
     while True:
-        khz_system.update()
-        time.sleep(wait)
+        khz_system = lib.Upstream_Device(config)
+        hour = time.localtime(time.time()).tm_hour
+        while hour == time.localtime(time.time()).tm_hour:
+            khz_system.update()
+            time.sleep(wait)
 
 
 if __name__ == '__main__':
