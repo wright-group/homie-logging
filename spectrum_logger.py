@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.gridspec as gridspec
 from matplotlib.widgets import Slider
+import toml
 import time
 import pathlib
 
