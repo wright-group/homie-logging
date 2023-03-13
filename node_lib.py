@@ -36,8 +36,10 @@ class YaqcNode(Node_Base):
     def update(self):
         try:
             measured = self.get_measured()
-        except TimeoutError as e:
+        except Exception as e:
             logging.getLogger(__name__).error(e)
+            return
+        if not measured.keys():
             return
         for k in self.units.keys():
             self.set_property_value(k.replace("_", "-"), measured[k])
@@ -61,9 +63,12 @@ class Millennia(YaqcNode):
         while time.time() - start < 3:
             time.sleep(0.1)
             if self.client.get_measurement_id() != m_id:
-                return self.client.get_measured()
+                measured = self.client.get_measured()
+                if measured["shg_temp"] < 10**4:
+                    raise ValueError("Measurement channels are out of order")
+                return measured
         self.client.shutdown(True)
-        raise TimeoutError(f"Timeout on node {self.__class__}")
+        raise TimeoutError
 
 class Tsunami(YaqcNode):
     units = {
