@@ -65,7 +65,8 @@ class Millennia(YaqcNode):
             if self.client.get_measurement_id() != m_id:
                 measured = self.client.get_measured()
                 if measured["shg_temp"] < 10**4:
-                    raise ValueError("Measurement channels are out of order")
+                    logging.getLogger(__name__).error("Measurement channels are out of order")
+                    return {}
                 return measured
         self.client.shutdown(True)
         raise TimeoutError

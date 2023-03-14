@@ -6,7 +6,7 @@ import toml
 import device_lib as lib
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 here = pathlib.Path(__file__).resolve().parent
