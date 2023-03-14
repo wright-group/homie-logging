@@ -20,6 +20,11 @@ class YaqcNode(Node_Base):
         self.units = self.get_units()
 
         measured = self.get_measured()
+        if not measured:  # no dict returned
+            logging.getLogger(__name__).error(
+                f"cannot retrieve measurements from Node {self.__cls__}"
+            )
+            raise ValueError(f"measured: {measured}")
 
         for k in self.units.keys():
             self.add_property(
@@ -39,7 +44,7 @@ class YaqcNode(Node_Base):
         except Exception as e:
             logging.getLogger(__name__).error(e)
             return
-        if not measured.keys():
+        if not measured:
             return
         for k in self.units.keys():
             self.set_property_value(k.replace("_", "-"), measured[k])
@@ -56,7 +61,7 @@ class Millennia(YaqcNode):
     def get_units(self):
         return self.client.get_channel_units()
 
-    def get_measured(self):
+    def get_measured(self) -> dict:
         m_id = self.client.get_measurement_id()
         self.client.measure()
         start = time.time()
@@ -65,7 +70,7 @@ class Millennia(YaqcNode):
             if self.client.get_measurement_id() != m_id:
                 measured = self.client.get_measured()
                 if measured["shg_temp"] < 10**4:
-                    logging.getLogger(__name__).error("Measurement channels are out of order")
+                    logging.getLogger(__name__).error(f"Measurement channels are out of order: {measured}")
                     return {}
                 return measured
         self.client.shutdown(True)
