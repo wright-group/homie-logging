@@ -22,7 +22,7 @@ class YaqcNode(Node_Base):
         measured = self.get_measured()
         if not measured:  # no dict returned
             logging.getLogger(__name__).error(
-                f"cannot retrieve measurements from Node {self.__cls__}"
+                f"cannot retrieve measurements from Node {self.__class__}"
             )
             raise ValueError(f"measured: {measured}")
 
@@ -71,7 +71,9 @@ class Millennia(YaqcNode):
                 measured = self.client.get_measured()
                 if measured["shg_temp"] < 10**4:
                     logging.getLogger(__name__).error(f"Measurement channels are out of order: {measured}")
-                    return {}
+                    logging.getLogger(__name__).info("attempting extra read")
+                    self.client.extra_scpi_read()
+                    return self.get_measured()
                 return measured
         self.client.shutdown(True)
         raise TimeoutError
