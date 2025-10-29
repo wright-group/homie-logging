@@ -1,5 +1,4 @@
 yaqc
-toml
 scipy
 numpy
-Homie4
+# Homie4  # use pip

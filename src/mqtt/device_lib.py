@@ -1,5 +1,5 @@
 from homie.device_base import Device_Base
-import node_lib as node
+from . import node_lib as node
 
 
 class Upstream_Device(Device_Base):

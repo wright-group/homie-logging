@@ -1,9 +1,9 @@
-
 import time
 import logging
 import pathlib
 import tomllib as toml
-import device_lib as lib
+
+from . import device_lib as lib
 
 
 logging.basicConfig(level=logging.INFO)

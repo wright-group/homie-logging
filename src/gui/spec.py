@@ -15,7 +15,7 @@ config_filepath = pathlib.Path().expanduser() / "homie-logging" / "spec.toml"
 
 
 def main():
-    config = toml.load((config_filepath / "spectrum_logger.toml").open("rb"))
+    config = toml.load(config_filepath.open("rb"))
     state = {
         "current" : 0,
         "next" : 0
