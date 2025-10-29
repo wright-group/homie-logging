@@ -1,6 +1,6 @@
 # configs
-spectrum_logger.toml
-wright-upstream-0.toml
+# spectrum_logger.toml
+# wright-upstream-0.toml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

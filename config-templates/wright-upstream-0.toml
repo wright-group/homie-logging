@@ -1,0 +1,26 @@
+[device]
+device_id = ""
+device_name = ""
+wait = 15
+
+[homie]
+topic = "homie"
+
+[mqtt]
+MQTT_BROKER = ""
+MQTT_USERNAME = ""
+MQTT_PASSWORD = ""
+
+[millennia]
+id = "millennia-ev"
+name = "Millennia eV"
+type = "laser"
+yaqc_port = 39000
+
+[tsunami]
+id = "tsunami-spec-0"
+name = "tsunami-spectrum"
+type = "laser"
+reference_path = ""
+reference_time_us = 13000
+yaqc_port = 39001
