@@ -1,6 +1,4 @@
 from homie.device_base import Device_Base
-import logging
-import numpy as np
 import node_lib as node
 
 

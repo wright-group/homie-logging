@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "homie-logging"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "yaqc",
+    "scipy",
+    "numpy",
+    "Homie4",
+]
+version = "0.1.0"
+
+[project.scripts]
+mqtt-publish = "mqtt.main:main"
+show-spectrum = "gui.spec:main"
