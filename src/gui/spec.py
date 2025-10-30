@@ -10,7 +10,7 @@ import pathlib
 
 
 # plt.style.use("dark_background")
-config_filepath = pathlib.Path().expanduser() / "homie-logging" / "show-spectrum.toml"
+config_filepath = pathlib.Path.home() / "homie-logging" / "show-spectrum.toml"
 
 
 def main():
@@ -41,7 +41,7 @@ def main():
         ymin = [-1] * wl.size
         ymax = [1] * wl.size
 
-    l, = ax.plot(wl[sl], spec.get_measured()["mean"][sl], lw=2)
+    l, = ax.plot(wl[sl], y0[sl], lw=2)
     ref_path = config["reference"].get("path", None)
     if ref_path:
         ref_x, ref_y = np.genfromtxt(

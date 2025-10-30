@@ -103,7 +103,7 @@ class Tsunami(YaqcNode):
 
     def get_measured(self) -> dict:
         nm = self.client.get_mappings()["wavelengths"]
-        y = self.client.get_measured()["intensities"]
+        y = self.client.get_measured()["mean"]
 
         self.time_us = self.client.get_integration_time_micros()
 
