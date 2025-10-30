@@ -13,7 +13,7 @@ from local folder:
 ```
 pip install -e .
 ```
-Put config files `spec.toml` and `wright-upstream.toml` in directory `~/homie-logging`.
+Put config files `show-spectrum.toml` and `mqtt-publish.toml` in directory `~/homie-logging`.
 Config templates are provided  (`.\config-templates`).
 
 ## usage (cli)

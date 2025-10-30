@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 here = pathlib.Path(__file__).resolve().parent
-config_filepath = pathlib.Path().expanduser() / "homie-logging" / "wright-upstream-0.toml"
+config_filepath = pathlib.Path().expanduser() / "homie-logging" / "mqtt-publish.toml"
 config = toml.load(config_filepath.open("rb"))
 wait = config["device"].pop("wait", 15)
 
