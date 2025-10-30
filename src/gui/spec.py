@@ -42,8 +42,8 @@ def main():
         ymax = [1] * wl.size
 
     l, = ax.plot(wl[sl], spec.get_measured()["mean"][sl], lw=2)
-    try:
-        ref_path = config["reference"]["path"]
+    ref_path = config["reference"].get("path", None)
+    if ref_path:
         ref_x, ref_y = np.genfromtxt(
             ref_path,
             unpack=True,
@@ -52,8 +52,6 @@ def main():
         )
         ref_y *= config["reference"]["scalar"] / ref_y.max()
         ax.plot(1e7/ref_x, ref_y, ls='--', linewidth=2)
-    except KeyError:
-        pass
 
     ax.grid()
     ax.set_ylim(-100, 4096)
