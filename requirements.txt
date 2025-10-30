@@ -1,4 +1,0 @@
-yaqc
-scipy
-numpy
-# Homie4  # use pip

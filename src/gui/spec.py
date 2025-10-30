@@ -1,5 +1,4 @@
-"""ocean optics script from fs table
-"""
+"""ocean optics script from fs table"""
 
 
 import numpy as np
@@ -11,7 +10,7 @@ import pathlib
 
 
 # plt.style.use("dark_background")
-config_filepath = pathlib.Path.home() / "homie-logging" / "spec.toml"
+config_filepath = pathlib.Path().expanduser() / "homie-logging" / "show-spectrum.toml"
 
 
 def main():
