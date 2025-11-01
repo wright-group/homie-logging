@@ -1,5 +1,0 @@
-yaqc
-toml
-scipy
-numpy
-Homie4
